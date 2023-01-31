@@ -6,6 +6,7 @@ variable "avail_zone" {}
 variable "vpc_cidr_block" {}
 variable "subnet_cidr_block" {}
 variable "env_prefix" {}
+variable "instance_type" {}
 
 resource "aws_vpc" "my-app-vpc" {
   cidr_block = var.vpc_cidr_block
@@ -77,8 +78,8 @@ data "aws_ami" "latest_amazon_linux_ami" {
   most_recent = true
   owners = ["amazon"]
   filter {
-    name = "description"
-    values = ["Amazon Linux 2*"]
+    name = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
   filter {
     name = "virtualization-type"
@@ -88,5 +89,21 @@ data "aws_ami" "latest_amazon_linux_ami" {
 
 output "aws_ami_id" {
   value = data.aws_ami.latest_amazon_linux_ami.id
+}
+
+resource "aws_instance" "myapp-server" {
+  ami = data.aws_ami.latest_amazon_linux_ami.id
+  instance_type = var.instance_type
+
+  availability_zone = var.avail_zone
+  vpc_security_group_ids = [aws_default_security_group.default-sg.id]
+  subnet_id = aws_subnet.my-app-subnet-1.id
+
+  associate_public_ip_address = true
+  key_name = "haha"
+
+  tags = {
+    Name = "${var.env_prefix}-server"
+  }
 }
 
