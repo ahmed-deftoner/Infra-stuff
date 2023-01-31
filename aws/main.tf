@@ -73,3 +73,20 @@ resource "aws_default_security_group" "default-sg" {
   }
 }
 
+data "aws_ami" "latest_amazon_linux_ami" {
+  most_recent = true
+  owners = ["amazon"]
+  filter {
+    name = "description"
+    values = ["Amazon Linux 2*"]
+  }
+  filter {
+    name = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+output "aws_ami_id" {
+  value = data.aws_ami.latest_amazon_linux_ami.id
+}
+
