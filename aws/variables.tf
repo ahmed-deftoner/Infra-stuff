@@ -3,3 +3,5 @@ variable "vpc_cidr_block" {}
 variable "subnet_cidr_block" {}
 variable "env_prefix" {}
 variable "instance_type" {}
+variable "key_name" {}
+variable "ami" {}
