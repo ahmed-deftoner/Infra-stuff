@@ -1,2 +1,2 @@
-# my_IaC_cheats
- terraform cheats
+# Infra-stuff
+ terraform configs for my infrastructure
