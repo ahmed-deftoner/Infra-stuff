@@ -2,11 +2,6 @@ provider "aws" {
     region = "ap-south-1"
 }
 
-variable "avail_zone" {}
-variable "vpc_cidr_block" {}
-variable "subnet_cidr_block" {}
-variable "env_prefix" {}
-variable "instance_type" {}
 
 resource "aws_vpc" "my-app-vpc" {
   cidr_block = var.vpc_cidr_block
@@ -85,14 +80,6 @@ data "aws_ami" "latest_amazon_linux_ami" {
     name = "virtualization-type"
     values = ["hvm"]
   }
-}
-
-output "aws_ami_id" {
-  value = data.aws_ami.latest_amazon_linux_ami.id
-}
-
-output "instance_public_ip" {
-  value = aws_instance.myapp-server.public_ip
 }
 
 resource "aws_instance" "myapp-server" {
