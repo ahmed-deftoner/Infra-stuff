@@ -10,33 +10,13 @@ resource "aws_vpc" "my-app-vpc" {
   }
 }
 
-resource "aws_subnet" "my-app-subnet-1" {
+module "name" {
+  source = "modules/subnet"
+  avail_zone = var.avail_zone
+  subnet_cidr_block = var.subnet_cidr_block
+  env_prefix = var.env_prefix
   vpc_id = aws_vpc.my-app-vpc.id
-  cidr_block = var.subnet_cidr_block
-  availability_zone = var.avail_zone
-  tags = {
-    Name = "${var.env_prefix}-subnet"
-  }
-}
-
-resource "aws_internet_gateway" "my-app-igw" {
-  vpc_id = aws_vpc.my-app-vpc.id
-  tags = {
-    Name = "${var.env_prefix}-igw"
-  }
-}
-
-resource "aws_default_route_table" "main-rtb" {
   default_route_table_id = aws_vpc.my-app-vpc.default_route_table_id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.my-app-igw.id
-  }
-
-  tags = {
-    Name = "${var.env_prefix}-main-rbt"
-  }
 }
 
 resource "aws_default_security_group" "default-sg" {
